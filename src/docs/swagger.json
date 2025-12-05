@@ -1,0 +1,800 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Feedback de Funcionários",
+        "description": "API para gerenciamento de feedbacks de funcionários em um sistema de avaliação organizacional",
+        "contact": {
+            "name": "Support",
+            "email": "talitasantosdev@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Employee Feedback"
+        }
+    ],
+    "paths": {
+        "/api/v1/employee-feedback": {
+            "get": {
+                "summary": "Listar todos os feedbacks de funcionários",
+                "description": "Retorna uma lista de feedbacks de funcionários com opções de filtro e paginação",
+                "tags": ["Employee Feedback"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Número da página"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Limite de itens por página"
+                    },
+                    {
+                        "in": "query",
+                        "name": "department",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Marketing",
+                                "Financeiro",
+                                "Recursos Humanos",
+                                "Tecnologia",
+                                "Administração",
+                                "Comercial",
+                                "Operações",
+                                "Logística",
+                                "Jurídico"
+                            ]
+                        },
+                        "description": "Filtrar por departamento"
+                    },
+                    {
+                        "in": "query",
+                        "name": "jobRole",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Filtrar por cargo"
+                    },
+                    {
+                        "in": "query",
+                        "name": "location",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Filtrar por localização"
+                    },
+                    {
+                        "in": "query",
+                        "name": "gender",
+                        "schema": {
+                            "type": "string",
+                            "enum": ["MALE", "FEMALE", "OTHER"]
+                        },
+                        "description": "Filtrar por gênero"
+                    },
+                    {
+                        "in": "query",
+                        "name": "companyTenure",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Menos de 6 meses",
+                                "6 meses a 1 ano",
+                                "1 a 2 anos",
+                                "2 a 3 anos",
+                                "3 a 4 anos",
+                                "4 a 5 anos",
+                                "5 a 6 anos",
+                                "6 a 7 anos",
+                                "7 a 8 anos",
+                                "8 a 9 anos",
+                                "9 a 10 anos",
+                                "10 a 12 anos",
+                                "12 a 15 anos",
+                                "15 a 20 anos",
+                                "Mais de 20 anos"
+                            ]
+                        },
+                        "description": "Filtrar por tempo de empresa"
+                    },
+                    {
+                        "in": "query",
+                        "name": "generation",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Geração Alpha",
+                                "Geração Z",
+                                "Geração Y",
+                                "Geração X",
+                                "Baby Boomers"
+                            ]
+                        },
+                        "description": "Filtrar por geração"
+                    },
+                    {
+                        "in": "query",
+                        "name": "dateFrom",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "description": "Data de início para filtro"
+                    },
+                    {
+                        "in": "query",
+                        "name": "dateTo",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "description": "Data de término para filtro"
+                    },
+                    {
+                        "in": "query",
+                        "name": "search",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Busca textual"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de feedbacks de funcionários retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/EmployeeFeedback"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Criar um novo feedback de funcionário",
+                "description": "Cria um novo feedback de funcionário",
+                "tags": ["Employee Feedback"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmployeeFeedbackInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Feedback de funcionário criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "employeeFeedback": {
+                                            "$ref": "#/components/schemas/EmployeeFeedback"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/employee-feedback/{id}": {
+            "get": {
+                "summary": "Obter detalhes de um feedback de funcionário específico",
+                "description": "Retorna um feedback de funcionário pelo ID",
+                "tags": ["Employee Feedback"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID do feedback de funcionário"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do feedback de funcionário retornados com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "employeeFeedback": {
+                                            "$ref": "#/components/schemas/EmployeeFeedback"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualizar um feedback de funcionário existente",
+                "description": "Atualiza um feedback de funcionário existente",
+                "tags": ["Employee Feedback"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID do feedback de funcionário"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmployeeFeedbackInputUpdate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Feedback de funcionário atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Excluir um feedback de funcionário existente",
+                "description": "Deleta um feedback de funcionário existente",
+                "tags": ["Employee Feedback"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID do feedback de funcionário"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Feedback de funcionário excluído com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "EmployeeFeedbackInput": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "corporateEmail": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "department": {
+                        "type": "string",
+                        "enum": [
+                            "Marketing",
+                            "Financeiro",
+                            "Recursos Humanos",
+                            "Tecnologia",
+                            "Administração",
+                            "Comercial",
+                            "Operações",
+                            "Logística",
+                            "Jurídico"
+                        ]
+                    },
+                    "jobRole": {
+                        "type": "string"
+                    },
+                    "jobFunction": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "companyTenure": {
+                        "type": "string",
+                        "enum": [
+                            "Menos de 6 meses",
+                            "6 meses a 1 ano",
+                            "1 a 2 anos",
+                            "2 a 3 anos",
+                            "3 a 4 anos",
+                            "4 a 5 anos",
+                            "5 a 6 anos",
+                            "6 a 7 anos",
+                            "7 a 8 anos",
+                            "8 a 9 anos",
+                            "9 a 10 anos",
+                            "10 a 12 anos",
+                            "12 a 15 anos",
+                            "15 a 20 anos",
+                            "Mais de 20 anos"
+                        ]
+                    },
+                    "gender": {
+                        "type": "string",
+                        "enum": ["MALE", "FEMALE", "OTHER"]
+                    },
+                    "generation": {
+                        "type": "string",
+                        "enum": [
+                            "Geração Alpha",
+                            "Geração Z",
+                            "Geração Y",
+                            "Geração X",
+                            "Baby Boomers"
+                        ]
+                    },
+                    "level0Company": {
+                        "type": "string"
+                    },
+                    "level1Directorate": {
+                        "type": "string"
+                    },
+                    "level2Management": {
+                        "type": "string"
+                    },
+                    "level3Coordination": {
+                        "type": "string"
+                    },
+                    "level4Area": {
+                        "type": "string"
+                    },
+                    "responseDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "jobInterest": {
+                        "type": "integer"
+                    },
+                    "jobInterestComments": {
+                        "type": "string"
+                    },
+                    "contribution": {
+                        "type": "integer"
+                    },
+                    "contributionComments": {
+                        "type": "string"
+                    },
+                    "learningDevelopment": {
+                        "type": "integer"
+                    },
+                    "learningDevelopmentComments": {
+                        "type": "string"
+                    },
+                    "feedbackScore": {
+                        "type": "integer"
+                    },
+                    "feedbackComments": {
+                        "type": "string"
+                    },
+                    "managerInteraction": {
+                        "type": "integer"
+                    },
+                    "managerInteractionComments": {
+                        "type": "string"
+                    },
+                    "careerClarity": {
+                        "type": "integer"
+                    },
+                    "careerClarityComments": {
+                        "type": "string"
+                    },
+                    "permanenceExpectation": {
+                        "type": "integer"
+                    },
+                    "permanenceExpectationComments": {
+                        "type": "string"
+                    },
+                    "enpsScore": {
+                        "type": "integer"
+                    },
+                    "enpsOpenComments": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "email",
+                    "corporateEmail",
+                    "department",
+                    "jobRole",
+                    "jobFunction",
+                    "location",
+                    "companyTenure",
+                    "gender",
+                    "generation",
+                    "level0Company",
+                    "level1Directorate",
+                    "level2Management",
+                    "level3Coordination",
+                    "level4Area",
+                    "responseDate",
+                    "jobInterest",
+                    "jobInterestComments",
+                    "learningDevelopment",
+                    "careerClarity"
+                ]
+            },
+            "EmployeeFeedbackInputUpdate": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "corporateEmail": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "department": {
+                        "type": "string",
+                        "enum": [
+                            "Marketing",
+                            "Financeiro",
+                            "Recursos Humanos",
+                            "Tecnologia",
+                            "Administração",
+                            "Comercial",
+                            "Operações",
+                            "Logística",
+                            "Jurídico"
+                        ]
+                    },
+                    "jobRole": {
+                        "type": "string"
+                    },
+                    "jobFunction": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "companyTenure": {
+                        "type": "string",
+                        "enum": [
+                            "Menos de 6 meses",
+                            "6 meses a 1 ano",
+                            "1 a 2 anos",
+                            "2 a 3 anos",
+                            "3 a 4 anos",
+                            "4 a 5 anos",
+                            "5 a 6 anos",
+                            "6 a 7 anos",
+                            "7 a 8 anos",
+                            "8 a 9 anos",
+                            "9 a 10 anos",
+                            "10 a 12 anos",
+                            "12 a 15 anos",
+                            "15 a 20 anos",
+                            "Mais de 20 anos"
+                        ]
+                    },
+                    "gender": {
+                        "type": "string",
+                        "enum": ["MALE", "FEMALE", "OTHER"]
+                    },
+                    "generation": {
+                        "type": "string",
+                        "enum": [
+                            "Geração Alpha",
+                            "Geração Z",
+                            "Geração Y",
+                            "Geração X",
+                            "Baby Boomers"
+                        ]
+                    },
+                    "level0Company": {
+                        "type": "string"
+                    },
+                    "level1Directorate": {
+                        "type": "string"
+                    },
+                    "level2Management": {
+                        "type": "string"
+                    },
+                    "level3Coordination": {
+                        "type": "string"
+                    },
+                    "level4Area": {
+                        "type": "string"
+                    },
+                    "responseDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "jobInterest": {
+                        "type": "integer"
+                    },
+                    "jobInterestComments": {
+                        "type": "string"
+                    },
+                    "contribution": {
+                        "type": "integer"
+                    },
+                    "contributionComments": {
+                        "type": "string"
+                    },
+                    "learningDevelopment": {
+                        "type": "integer"
+                    },
+                    "learningDevelopmentComments": {
+                        "type": "string"
+                    },
+                    "feedbackScore": {
+                        "type": "integer"
+                    },
+                    "feedbackComments": {
+                        "type": "string"
+                    },
+                    "managerInteraction": {
+                        "type": "integer"
+                    },
+                    "managerInteractionComments": {
+                        "type": "string"
+                    },
+                    "careerClarity": {
+                        "type": "integer"
+                    },
+                    "careerClarityComments": {
+                        "type": "string"
+                    },
+                    "permanenceExpectation": {
+                        "type": "integer"
+                    },
+                    "permanenceExpectationComments": {
+                        "type": "string"
+                    },
+                    "enpsScore": {
+                        "type": "integer"
+                    },
+                    "enpsOpenComments": {
+                        "type": "string"
+                    }
+                }
+            },
+            "EmployeeFeedback": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "corporateEmail": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "department": {
+                        "type": "string",
+                        "enum": [
+                            "Marketing",
+                            "Financeiro",
+                            "Recursos Humanos",
+                            "Tecnologia",
+                            "Administração",
+                            "Comercial",
+                            "Operações",
+                            "Logística",
+                            "Jurídico"
+                        ]
+                    },
+                    "jobRole": {
+                        "type": "string"
+                    },
+                    "jobFunction": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "companyTenure": {
+                        "type": "string",
+                        "enum": [
+                            "Menos de 6 meses",
+                            "6 meses a 1 ano",
+                            "1 a 2 anos",
+                            "2 a 3 anos",
+                            "3 a 4 anos",
+                            "4 a 5 anos",
+                            "5 a 6 anos",
+                            "6 a 7 anos",
+                            "7 a 8 anos",
+                            "8 a 9 anos",
+                            "9 a 10 anos",
+                            "10 a 12 anos",
+                            "12 a 15 anos",
+                            "15 a 20 anos",
+                            "Mais de 20 anos"
+                        ]
+                    },
+                    "gender": {
+                        "type": "string",
+                        "enum": ["MALE", "FEMALE", "OTHER"]
+                    },
+                    "generation": {
+                        "type": "string",
+                        "enum": [
+                            "Geração Alpha",
+                            "Geração Z",
+                            "Geração Y",
+                            "Geração X",
+                            "Baby Boomers"
+                        ]
+                    },
+                    "level0Company": {
+                        "type": "string"
+                    },
+                    "level1Directorate": {
+                        "type": "string"
+                    },
+                    "level2Management": {
+                        "type": "string"
+                    },
+                    "level3Coordination": {
+                        "type": "string"
+                    },
+                    "level4Area": {
+                        "type": "string"
+                    },
+                    "responseDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "jobInterest": {
+                        "type": "integer"
+                    },
+                    "jobInterestComments": {
+                        "type": "string"
+                    },
+                    "contribution": {
+                        "type": "integer"
+                    },
+                    "contributionComments": {
+                        "type": "string"
+                    },
+                    "learningDevelopment": {
+                        "type": "integer"
+                    },
+                    "learningDevelopmentComments": {
+                        "type": "string"
+                    },
+                    "feedbackScore": {
+                        "type": "integer"
+                    },
+                    "feedbackComments": {
+                        "type": "string"
+                    },
+                    "managerInteraction": {
+                        "type": "integer"
+                    },
+                    "managerInteractionComments": {
+                        "type": "string"
+                    },
+                    "careerClarity": {
+                        "type": "integer"
+                    },
+                    "careerClarityComments": {
+                        "type": "string"
+                    },
+                    "permanenceExpectation": {
+                        "type": "integer"
+                    },
+                    "permanenceExpectationComments": {
+                        "type": "string"
+                    },
+                    "enpsScore": {
+                        "type": "integer"
+                    },
+                    "enpsOpenComments": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "corporateEmail",
+                    "department",
+                    "jobRole",
+                    "jobFunction",
+                    "location",
+                    "companyTenure",
+                    "gender",
+                    "generation",
+                    "level0Company",
+                    "level1Directorate",
+                    "level2Management",
+                    "level3Coordination",
+                    "level4Area",
+                    "responseDate",
+                    "jobInterest",
+                    "jobInterestComments",
+                    "learningDevelopment",
+                    "careerClarity"
+                ]
+            }
+        }
+    }
+}

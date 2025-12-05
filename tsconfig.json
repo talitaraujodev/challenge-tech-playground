@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "transform": "ts-auto-mock/transformer",
+        "cacheBetweenTests": false
+      },
+      { "name": "typescript-tslint-plugin" }
+    ],
+    "target": "es2022",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "module": "commonjs",
+    "outDir": "./build",
+    "rootDir": "./src",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true
+  },
+  "exclude": ["./tests"],
+  "include": ["./src"]
+}

@@ -1,0 +1,17 @@
+export enum CompanyTenure {
+    LESS_THAN_6_MONTHS = 'Menos de 6 meses',
+    LESS_THAN_1_YEAR = '6 meses a 1 ano',
+    LESS_THAN_2_YEARS = '1 a 2 anos',
+    LESS_THAN_3_YEARS = '2 a 3 anos',
+    LESS_THAN_4_YEARS = '3 a 4 anos',
+    LESS_THAN_5_YEARS = '4 a 5 anos',
+    LESS_THAN_6_YEARS = '5 a 6 anos',
+    LESS_THAN_7_YEARS = '6 a 7 anos',
+    LESS_THAN_8_YEARS = '7 a 8 anos',
+    LESS_THAN_9_YEARS = '8 a 9 anos',
+    LESS_THAN_10_YEARS = '9 a 10 anos',
+    LESS_THAN_12_YEARS = '10 a 12 anos',
+    LESS_THAN_15_YEARS = '12 a 15 anos',
+    LESS_THAN_20_YEARS = '15 a 20 anos',
+    MORE_THAN_20_YEARS = 'Mais de 20 anos',
+};

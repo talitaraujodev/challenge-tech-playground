@@ -1,8 +1,26 @@
 version: "3.8"
 
 services:
+  app:
+    build: .
+    container_name: api-employee-feedback
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      PORT: 8000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: 123456789
+      DB_NAME: people_insights
+    networks:
+      - app_network
+
   postgres:
-    image: postgres:latest
+    image: postgres:15
+    container_name: postgres-employee-feedback
     environment:
       POSTGRES_DB: people_insights
       POSTGRES_USER: postgres
@@ -10,4 +28,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./src/config/database/createTableConfig.sql:/docker-entrypoint-initdb.d/createTableConfig.sql
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/config/database/createTableConfig.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app_network
+
+networks:
+  app_network:
+
+volumes:
+  postgres_data:

@@ -18,11 +18,11 @@ export class EmployeeFeedbackController {
       const employeeFeedback = await this.employeeFeedbackServiceInputPort.create(request.body);
 
       return response
+        .status(Constantes.httpStatus.CREATED)
         .json({
           message: Messages.EMPLOYEE_FEEDBACK_CREATED,
           employeeFeedback,
-        })
-        .status(Constantes.httpStatus.CREATED);
+        });
     } catch (e) {
       if (e instanceof BaseError) {
         return response
@@ -30,7 +30,7 @@ export class EmployeeFeedbackController {
           .json({ message: e.message, status: e.statusCode, errors: e.errors });
       }
 
-      return response.json(e).status(Constantes.httpStatus.ERROR_SERVER);
+      return response.status(Constantes.httpStatus.ERROR_SERVER).json(e);
     }
   }
 
@@ -40,17 +40,17 @@ export class EmployeeFeedbackController {
       await this.employeeFeedbackServiceInputPort.update(id, request.body);
 
       return response
+        .status(Constantes.httpStatus.OK)
         .json({
           message: Messages.EMPLOYEE_FEEDBACK_UPDATED,
-        })
-        .status(Constantes.httpStatus.OK);
+        });
     } catch (e) {
       if (e instanceof BaseError) {
         return response
           .status(e.statusCode)
           .json({ message: e.message, status: e.statusCode, errors: e.errors });
       }
-      return response.json(e).status(Constantes.httpStatus.ERROR_SERVER);
+      return response.status(Constantes.httpStatus.ERROR_SERVER).json(e);
     }
   }
 
@@ -67,7 +67,7 @@ export class EmployeeFeedbackController {
           .status(e.statusCode)
           .json({ message: e.message, status: e.statusCode, errors: e.errors });
       }
-      return response.json(e).status(Constantes.httpStatus.ERROR_SERVER);
+      return response.status(Constantes.httpStatus.ERROR_SERVER).json(e);
     }
   }
 
@@ -78,17 +78,17 @@ export class EmployeeFeedbackController {
       const employeeFeedback = await this.employeeFeedbackServiceInputPort.findById(id);
 
       return response
+        .status(Constantes.httpStatus.OK)
         .json({
           employeeFeedback,
-        })
-        .status(Constantes.httpStatus.OK);
+        });
     } catch (e) {
       if (e instanceof BaseError) {
         return response
           .status(e.statusCode)
           .json({ message: e.message, status: e.statusCode, errors: e.errors });
       }
-      return response.json(e).status(Constantes.httpStatus.ERROR_SERVER);
+      return response.status(Constantes.httpStatus.ERROR_SERVER).json(e);
     }
   }
 
@@ -97,6 +97,7 @@ export class EmployeeFeedbackController {
       const { page, limit, department, jobRole, location, gender, companyTenure, generation, dateFrom, dateTo, search } = request.query;
 
       return response
+        .status(Constantes.httpStatus.OK)
         .json(
           await this.employeeFeedbackServiceInputPort.findAll(
             {
@@ -110,15 +111,14 @@ export class EmployeeFeedbackController {
               generation: generation as string,
             },
           ),
-        )
-        .status(Constantes.httpStatus.OK);
+        );
     } catch (e) {
       if (e instanceof BaseError) {
         return response
           .status(e.statusCode)
           .json({ message: e.message, status: e.statusCode, errors: e.errors });
       }
-      return response.json(e).status(Constantes.httpStatus.ERROR_SERVER);
+      return response.status(Constantes.httpStatus.ERROR_SERVER).json(e);
     }
   }
 }

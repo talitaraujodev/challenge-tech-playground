@@ -124,7 +124,7 @@ export class EmployeeFeedbackPersistenceAdapter implements EmployeeFeedbackPersi
         };
     }
 
-    async findById(id: string): Promise<EmployeeFeedback> {
+    async findById(id: string): Promise<EmployeeFeedback | null> {
         const employeeFeedback = await this.employeeFeedbackRepository.findOne({ where: { id } });
 
         if (!employeeFeedback) return null;

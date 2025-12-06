@@ -20,7 +20,7 @@ export interface EmployeeFeedbackPersistenceOutputPort {
         page: number;
         limit: number;
     }>;
-    findById(id: string): Promise<EmployeeFeedback>;
+    findById(id: string): Promise<EmployeeFeedback | null>;
     findByEmail(field: 'email' | 'corporateEmail', value: string): Promise<EmployeeFeedback | boolean>;
     update(id: string, employeeFeedback: EmployeeFeedback): Promise<EmployeeFeedback>;
     delete(id: string): Promise<void>;

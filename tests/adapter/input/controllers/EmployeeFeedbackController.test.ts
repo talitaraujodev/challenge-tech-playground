@@ -102,10 +102,9 @@ describe('EmployeeFeedbackController tests', () => {
         const response = await request(testApp)
             .put("/api/v1/employee-feedback/123")
             .send(employeeFeedback)
-            .expect(200);
+            .expect(204);
 
-        expect(response.status).toBe(200);
-        expect(response.body.message).toBeDefined();
+        expect(response.status).toBe(204);
         expect(mockEmployeeFeedbackServiceInputPort.update).toHaveBeenCalledWith(
             "123",
             expect.objectContaining({

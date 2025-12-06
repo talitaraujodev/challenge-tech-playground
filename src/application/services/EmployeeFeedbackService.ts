@@ -16,7 +16,7 @@ export class EmployeeFeedbackService implements EmployeeFeedbackServiceInputPort
 
     async create(employeeFeedback: EmployeeFeedback): Promise<EmployeeFeedback> {
         const emailExists = await this.employeeFeedbackPersistenceOutputPort.findByEmail('email', employeeFeedback.email);
-        const errors =[];
+        const errors = [];
         if (emailExists) {
             errors.push({ title:'E-mail já existe', detail: 'O e-mail informado já existe', code: Constantes.httpStatus.BAD_REQUEST});
             throw new BadRequestError(

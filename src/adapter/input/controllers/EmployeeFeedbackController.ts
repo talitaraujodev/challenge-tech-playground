@@ -11,7 +11,7 @@ export class EmployeeFeedbackController {
   constructor(
     @inject(InjectionKeys.EMPLOYEE_FEEDBACK_SERVICE_INPUT_PORT)
     private readonly employeeFeedbackServiceInputPort: EmployeeFeedbackServiceInputPort,
-  ) {}
+  ) { }
 
   async create(request: Request, response: Response): Promise<Response> {
     try {
@@ -39,11 +39,7 @@ export class EmployeeFeedbackController {
       const id = request.params.id;
       await this.employeeFeedbackServiceInputPort.update(id, request.body);
 
-      return response
-        .status(Constantes.httpStatus.OK)
-        .json({
-          message: Messages.EMPLOYEE_FEEDBACK_UPDATED,
-        });
+      return response.status(Constantes.httpStatus.NOT_CONTENT).send();
     } catch (e) {
       if (e instanceof BaseError) {
         return response

@@ -98,49 +98,50 @@ describe('EmployeeFeedbackPersistenceAdapter tests', () => {
     };
 
     test('create_whenValid_returnEmployeeFeedback', async () => {
-        const repo = testDataSource.getRepository(EmployeeFeedbackEntity);
+        const employeeFeedbackRepository = testDataSource.getRepository(EmployeeFeedbackEntity);
 
         const id = uuidv4();
-        const model = createEmployeeFeedback(id);
+        const employeeFeedback = createEmployeeFeedback(id);
 
-        const entity = repo.create({
-            ...model,
+        const entity = employeeFeedbackRepository.create({
+            ...employeeFeedback,
             createdAt: new Date(),
-            updatedAt: new Date(),
+            updatedAt: new Date()
         });
 
-        await repo.save(entity);
+        await employeeFeedbackRepository.save(entity);
 
-        const saved = await repo.findOneBy({ id });
+        const employeeFeedbackSaved = await employeeFeedbackRepository.findOneBy({ id });
 
-        expect(saved).not.toBeNull();
-        expect(saved?.email).toBe(model.email);
+        expect(employeeFeedbackSaved).not.toBeNull();
+        expect(employeeFeedbackSaved?.name).toBe(employeeFeedback.name);
+        expect(employeeFeedbackSaved?.email).toBe(employeeFeedback.email);
     });
 
     test('findAll_whenRecordsExist_returnList', async () => {
-        const repo = testDataSource.getRepository(EmployeeFeedbackEntity);
+        const employeeFeedbackRepository = testDataSource.getRepository(EmployeeFeedbackEntity);
 
-        await repo.save(repo.create({ ...createEmployeeFeedback(uuidv4()), createdAt: new Date(), updatedAt: new Date() }));
-        await repo.save(repo.create({ ...createEmployeeFeedback(uuidv4()), createdAt: new Date(), updatedAt: new Date() }));
+        await employeeFeedbackRepository.save(employeeFeedbackRepository.create({ ...createEmployeeFeedback(uuidv4()), createdAt: new Date(), updatedAt: new Date() }));
+        await employeeFeedbackRepository.save(employeeFeedbackRepository.create({ ...createEmployeeFeedback(uuidv4()), createdAt: new Date(), updatedAt: new Date() }));
 
-        const results = await repo.find();
+        const employeeFeedbacks = await employeeFeedbackRepository.find();
 
-        expect(results.length).toBeGreaterThanOrEqual(2);
+        expect(employeeFeedbacks.length).toBeGreaterThanOrEqual(2);
     });
 
     test('findById_whenIdExists_returnEmployeeFeedback', async () => {
-        const repo = testDataSource.getRepository(EmployeeFeedbackEntity);
+        const employeeFeedbackRepository = testDataSource.getRepository(EmployeeFeedbackEntity);
         const id = uuidv4();
         const employeeFeedbackCreated = createEmployeeFeedback(id);
 
-        const entity = repo.create({
+        const entity = employeeFeedbackRepository.create({
             ...employeeFeedbackCreated,
             createdAt: new Date(),
             updatedAt: new Date()
         });
 
-        await repo.save(entity);
-        const employeeFeedback: any = await repo.findBy({ id });
+        await employeeFeedbackRepository.save(entity);
+        const employeeFeedback: any = await employeeFeedbackRepository.findBy({ id });
 
         expect(employeeFeedback[0].name).toBe('João Silva');
         expect(employeeFeedback[0].email).toBe(employeeFeedbackCreated.email);
@@ -149,40 +150,41 @@ describe('EmployeeFeedbackPersistenceAdapter tests', () => {
     });
 
     test('update_whenValid_updateSuccess', async () => {
-        const repo = testDataSource.getRepository(EmployeeFeedbackEntity);
+        const employeeFeedbackRepository = testDataSource.getRepository(EmployeeFeedbackEntity);
         const id = uuidv4();
 
-        const entity = repo.create({
+        const employeeFeedbackCreated = employeeFeedbackRepository.create({
             ...createEmployeeFeedback(id),
             createdAt: new Date(),
             updatedAt: new Date(),
         });
 
-        await repo.save(entity);
+        await employeeFeedbackRepository.save(employeeFeedbackCreated);
 
-        await repo.update({ id }, { name: "Maria Souza" });
+        await employeeFeedbackRepository.update({ id }, { name: "Maria Souza", email: "maria.souza@example.com" });
 
-        const updated = await repo.findOneBy({ id });
+        const employeeFeedbackUpdated = await employeeFeedbackRepository.findOneBy({ id });
 
-        expect(updated?.name).toBe("Maria Souza");
+        expect(employeeFeedbackUpdated?.name).toBe("Maria Souza");
+        expect(employeeFeedbackUpdated?.email).toBe("maria.souza@example.com");
     });
 
     test('delete_whenValid_deleteSuccess', async () => {
-        const repo = testDataSource.getRepository(EmployeeFeedbackEntity);
+        const employeeFeedbackRepository = testDataSource.getRepository(EmployeeFeedbackEntity);
         const id = uuidv4();
 
-        const entity = repo.create({
+        const employeeFeedbackCreated = employeeFeedbackRepository.create({
             ...createEmployeeFeedback(id),
             createdAt: new Date(),
             updatedAt: new Date(),
         });
 
-        await repo.save(entity);
+        await employeeFeedbackRepository.save(employeeFeedbackCreated);
 
-        await repo.delete({ id });
+        await employeeFeedbackRepository.delete({ id });
 
-        const deleted = await repo.findOneBy({ id });
+        const employeeFeedbackDeleted = await employeeFeedbackRepository.findOneBy({ id });
 
-        expect(deleted).toBeNull();
+        expect(employeeFeedbackDeleted).toBeNull();
     });
 });

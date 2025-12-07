@@ -157,7 +157,7 @@ psql -U postgres -d people_insights -f src/config/database/createTableConfig.sql
 
 ### 4. Importar dados iniciais
 ```bash
-npm run import:csv
+npm run import:csv:dev
 ```
 
 ### 5. Compilar o projeto

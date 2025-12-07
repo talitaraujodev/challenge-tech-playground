@@ -11,7 +11,8 @@
     "test": "jest",
     "prettier": "prettier --check \"src/**/*.ts\"",
     "lint": "eslint --ignore-path .eslintignore \"src/**/*.ts\" --fix",
-    "import:csv": "node build/config/database/insertDataConfig.js"
+    "import:csv": "node build/config/database/insertDataConfig.js",
+    "import:csv:dev": "ts-node src/config/database/insertDataConfig.ts"
   },
   "keywords": [],
   "author": "",

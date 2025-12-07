@@ -62,7 +62,7 @@ O arquivo `.env.example` contém todas as variáveis necessárias:
 PORT=8000
 
 # Database Configuration
-DB_HOST=localhost
+DB_HOST=postgres
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=123456789

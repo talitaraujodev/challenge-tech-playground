@@ -12,28 +12,9 @@ export class EmployeeFeedbackService implements EmployeeFeedbackServiceInputPort
     constructor(
         @inject('EmployeeFeedbackPersistenceOutputPort')
         private readonly employeeFeedbackPersistenceOutputPort: EmployeeFeedbackPersistenceOutputPort
-    ) {}
+    ) { }
 
     async create(employeeFeedback: EmployeeFeedback): Promise<EmployeeFeedback> {
-        const emailExists = await this.employeeFeedbackPersistenceOutputPort.findByEmail('email', employeeFeedback.email);
-        const errors = [];
-        if (emailExists) {
-            errors.push({ title:'E-mail já existe', detail: 'O e-mail informado já existe', code: Constantes.httpStatus.BAD_REQUEST});
-            throw new BadRequestError(
-                Constantes.httpMessages.BAD_REQUEST_ERROR,
-                errors,
-            );
-        }
-
-        const corporateEmailExists = await this.employeeFeedbackPersistenceOutputPort.findByEmail('corporateEmail', employeeFeedback.corporateEmail);
-        if (corporateEmailExists) {
-            errors.push({ title:'E-mail corporativo já existe', detail: 'O e-mail corporativo informado já existe', code: Constantes.httpStatus.BAD_REQUEST});
-            throw new BadRequestError(
-                Constantes.httpMessages.BAD_REQUEST_ERROR,
-                errors,
-            );
-        }
-
         const data = new EmployeeFeedback(
             uuidv4(),
             employeeFeedback.name,
@@ -77,6 +58,26 @@ export class EmployeeFeedbackService implements EmployeeFeedbackServiceInputPort
                 validateError,
             );
         }
+        console.log('email', employeeFeedback.email);
+        const emailExists = await this.employeeFeedbackPersistenceOutputPort.findByEmail('email', employeeFeedback.email);
+        const errors = [];
+        if (emailExists) {
+            errors.push({ title: 'E-mail já existe', detail: 'O e-mail informado já existe', code: Constantes.httpStatus.BAD_REQUEST });
+            throw new BadRequestError(
+                Constantes.httpMessages.BAD_REQUEST_ERROR,
+                errors,
+            );
+        }
+
+        const corporateEmailExists = await this.employeeFeedbackPersistenceOutputPort.findByEmail('corporateEmail', employeeFeedback.corporateEmail);
+        if (corporateEmailExists) {
+            errors.push({ title: 'E-mail corporativo já existe', detail: 'O e-mail corporativo informado já existe', code: Constantes.httpStatus.BAD_REQUEST });
+            throw new BadRequestError(
+                Constantes.httpMessages.BAD_REQUEST_ERROR,
+                errors,
+            );
+        }
+
         return await this.employeeFeedbackPersistenceOutputPort.create(data);
     }
 
@@ -119,13 +120,13 @@ export class EmployeeFeedbackService implements EmployeeFeedbackServiceInputPort
         const employeeFeedback = await this.employeeFeedbackPersistenceOutputPort.findById(id);
         const errors = [];
         if (!employeeFeedback) {
-            errors.push({  title:'Feedback do funcionário não encontrado', detail: 'Feedback do funcionário não encontrado por id', code: Constantes.httpStatus.NOT_FOUND});
+            errors.push({ title: 'Feedback do funcionário não encontrado', detail: 'Feedback do funcionário não encontrado por id', code: Constantes.httpStatus.NOT_FOUND });
             throw new NotFoundError(
                 Constantes.httpMessages.NOT_FOUND_ERROR,
                 errors,
             );
         }
-        
+
         return new EmployeeFeedback(
             employeeFeedback.id,
             employeeFeedback.name,

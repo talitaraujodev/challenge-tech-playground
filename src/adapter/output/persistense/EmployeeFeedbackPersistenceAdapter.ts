@@ -127,7 +127,7 @@ export class EmployeeFeedbackPersistenceAdapter implements EmployeeFeedbackPersi
     async findById(id: string): Promise<EmployeeFeedback | null> {
         const employeeFeedback = await this.employeeFeedbackRepository.findOne({ where: { id } });
 
-        if (!employeeFeedback) return null;
+        if (!employeeFeedback || employeeFeedback === null || employeeFeedback === undefined) return null;
 
         return new EmployeeFeedback(
             employeeFeedback.id,
@@ -212,7 +212,7 @@ export class EmployeeFeedbackPersistenceAdapter implements EmployeeFeedbackPersi
 
     async findByEmail(field: 'email' | 'corporateEmail', value: string): Promise<EmployeeFeedback | boolean> {
         const employeeFeedback = await this.employeeFeedbackRepository.findOne({ where: { [field]: value } });
-        if (!employeeFeedback) {
+        if (!employeeFeedback || employeeFeedback === null || employeeFeedback === undefined) {
             return false;
         }
         return new EmployeeFeedback(

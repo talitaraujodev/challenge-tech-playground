@@ -159,9 +159,9 @@ export class EmployeeFeedback {
         const { error } = employeeFeedbackSchema.validate(data, { abortEarly: false });
         
         if (error) {
-            return error.details.map((detail) => ({
+            return error.details.map((err) => ({
                 title: 'Campo inválido',
-                detail: detail.message,
+                detail: err.message,
                 code: Constantes.httpStatus.BAD_REQUEST,
             }));
         }

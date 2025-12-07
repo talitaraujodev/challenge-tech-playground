@@ -62,7 +62,7 @@ O arquivo `.env.example` contém todas as variáveis necessárias:
 PORT=8000
 
 # Database Configuration
-DB_HOST=postgres
+DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=123456789
@@ -80,7 +80,7 @@ cd challenge-tech-playground
 ### Passo 2: Criar o arquivo .env na raiz do projeto com as variáveis de ambiente
 ```bash
 PORT=8000
-DB_HOST=postgres
+DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=123456789

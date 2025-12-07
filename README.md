@@ -69,6 +69,8 @@ DB_PASSWORD=123456789
 DB_NAME=people_insights
 ```
 
+> **Nota:** Quando executando com Docker Compose, o `DB_HOST` é automaticamente sobrescrito para `postgres` (nome do serviço) pelo `docker-compose.yml`, permitindo que os containers se comuniquem corretamente. Para execução local (sem Docker), use `localhost`.
+
 ## 📦 Executar com Docker
 
 ### Passo 1: Clone o repositório

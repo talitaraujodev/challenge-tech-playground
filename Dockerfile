@@ -20,7 +20,7 @@ COPY --from=builder /app/src/docs ./build/docs
 COPY --from=builder /app/src/config/database/data.csv ./src/config/database/data.csv
 
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 8000

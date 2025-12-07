@@ -77,7 +77,17 @@ git clone <repository-url>
 cd challenge-tech-playground
 ```
 
-### Passo 2: Construir e iniciar todos os serviços
+### Passo 2: Criar o arquivo .env na raiz do projeto com as variáveis de ambiente
+```bash
+PORT=8000
+DB_HOST=postgres
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=123456789
+DB_NAME=people_insights
+
+```
+### Passo 3: Construir e iniciar todos os serviços
 ```bash
 docker-compose up -d --build
 ```
@@ -87,7 +97,7 @@ Este comando irá:
 - Iniciar o banco de dados PostgreSQL
 - Iniciar a aplicação
 
-### Passo 3: Verificar se os serviços estão rodando
+### Passo 4: Verificar se os serviços estão rodando
 ```bash
 docker-compose ps
 ```
@@ -96,7 +106,7 @@ Você deve ver os dois containers rodando:
 - `postgres-employee-feedback` (banco de dados)
 - `api-employee-feedback` (aplicação)
 
-### Passo 4: Verificar logs da aplicação
+### Passo 5: Verificar logs da aplicação
 ```bash
 docker-compose logs -f app
 ```
@@ -104,7 +114,7 @@ docker-compose logs -f app
 Os logs mostrarão:
 - O início da aplicação na porta 8000
 
-### Passo 5: Acessar a aplicação
+### Passo 6: Acessar a aplicação
 - **API:** http://localhost:8000
 - **Swagger Documentation:** http://localhost:8000/api/v1/docs
 - **Banco de dados:** localhost:5432

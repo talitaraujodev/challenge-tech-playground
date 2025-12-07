@@ -259,3 +259,9 @@ challenge-tech-playground/
 └── package.json
 ```
 
+### 👩🏽‍💻 Desenvolvido por Talita Araujo
+
+<div align="left">
+  <a href = "mailto:talitacumi.araujo@gmail.com"><img src="https://img.shields.io/badge/-Gmail-db4a39?style=for-the-badge&logo=gmail&logoColor=white"></a>
+  <a href="https://www.linkedin.com/in/talitaaraujodev" target="_blank"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
+</div>

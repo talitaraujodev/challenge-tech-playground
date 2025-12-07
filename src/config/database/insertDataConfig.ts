@@ -73,6 +73,14 @@ async function insertDataConfig() {
     await AppDataSource.initialize();
     const employeeFeedbackRepository = AppDataSource.getRepository(EmployeeFeedbackEntity);
 
+    // Verificar se já existem dados no banco
+    const existingCount = await employeeFeedbackRepository.count();
+    if (existingCount > 0) {
+        console.log(`Dados já existem no banco (${existingCount} registros). Pulando importação.`);
+        await AppDataSource.destroy();
+        return;
+    }
+
     console.log('Iniciando importação do CSV...');
 
     const filePath = './src/config/database/data.csv';
@@ -102,9 +110,10 @@ async function insertDataConfig() {
 
     // Processar cada linha de dados
     for (let i = 1; i < lines.length; i++) {
+        let row: { [key: string]: string } = {};
         try {
             const values = lines[i].split(';');
-            const row: { [key: string]: string } = {};
+            row = {};
             
             headers.forEach((header, index) => {
                 row[header] = values[index]?.trim() || '';
@@ -113,6 +122,16 @@ async function insertDataConfig() {
             // Verificar se a linha tem dados válidos
             if (!row['nome'] || !row['email']) {
                 console.warn(`Linha ${i + 1} ignorada: dados incompletos`);
+                continue;
+            }
+
+            // Verificar se o email já existe no banco
+            const existingRecord = await employeeFeedbackRepository.findOne({
+                where: { email: row['email'] }
+            });
+
+            if (existingRecord) {
+                console.warn(`Linha ${i + 1} ignorada: email ${row['email']} já existe no banco`);
                 continue;
             }
 
@@ -157,9 +176,15 @@ async function insertDataConfig() {
             if (inserted % 100 === 0) {
                 console.log(`Processadas ${inserted} linhas...`);
             }
-        } catch (error) {
-            errors++;
-            console.error(`Erro ao processar linha ${i + 1}:`, error);
+        } catch (error: any) {
+            // Se for erro de duplicação, apenas avisar e continuar
+            if (error?.code === '23505' || error?.driverError?.code === '23505') {
+                const email = row['email'] || 'desconhecido';
+                console.warn(`Linha ${i + 1} ignorada: registro duplicado (email: ${email})`);
+            } else {
+                errors++;
+                console.error(`Erro ao processar linha ${i + 1}:`, error.message || error);
+            }
         }
     }
 

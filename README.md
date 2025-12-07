@@ -2,7 +2,6 @@
 
 API REST desenvolvida para criar e gerenciar feedbacks de funcionários, implementada seguindo os princípios da Arquitetura Hexagonal (Ports and Adapters).
 
----
 
 ## ✅ Tarefas Concluídas
 
@@ -11,7 +10,6 @@ API REST desenvolvida para criar e gerenciar feedbacks de funcionários, impleme
 - **Task 4:** Configuração Docker Compose + Dockerfile  
 - **Task 9:** Criar API simples  
 
----
 
 ## 🚀 Funcionalidades
 
@@ -22,7 +20,6 @@ API REST desenvolvida para criar e gerenciar feedbacks de funcionários, impleme
 - Exclusão de feedback  
 - Documentação via Swagger/OpenAPI  
 
----
 
 ## 🧩 Arquitetura
 
@@ -33,7 +30,6 @@ O projeto segue a **Arquitetura Hexagonal**, dividida em:
 - **Adapter/Input** – Controllers, rotas e DTOs  
 - **Adapter/Output** – Persistência e integrações externas  
 
----
 
 ## 🛠 Tecnologias
 
@@ -45,7 +41,6 @@ O projeto segue a **Arquitetura Hexagonal**, dividida em:
 - Swagger/OpenAPI  
 - Jest  
 
----
 
 ## 🚀 Como Executar
 
@@ -53,7 +48,6 @@ O projeto segue a **Arquitetura Hexagonal**, dividida em:
 - Docker Engine 20.10+  
 - Docker Compose 2.0+
 
----
 
 ## ⚙️ Configuração de Variáveis de Ambiente
 
@@ -75,7 +69,7 @@ DB_PASSWORD=123456789
 DB_NAME=people_insights
 ```
 
-## 📦 Executar com Docker Compose
+## 📦 Executar com Docker
 
 ### Passo 1: Clone o repositório
 ```bash
@@ -83,40 +77,17 @@ git clone <repository-url>
 cd challenge-tech-playground
 ```
 
-### Passo 2: Iniciar o banco de dados PostgreSQL
+### Passo 2: Construir e iniciar todos os serviços
 ```bash
-docker-compose up -d postgres
+docker-compose up -d --build
 ```
 
-Aguarde alguns segundos para o banco de dados estar totalmente inicializado. Você pode verificar os logs com:
-```bash
-docker-compose logs -f postgres
-```
+Este comando irá:
+- Construir a imagem da aplicação usando o Dockerfile
+- Iniciar o banco de dados PostgreSQL
+- Iniciar a aplicação
 
-### Passo 3: Importar dados iniciais (CSV)
-Antes de iniciar a aplicação, é necessário importar os dados iniciais do arquivo CSV:
-
-```bash
-# Instalar dependências localmente (necessário para executar o script)
-npm install
-
-# Executar o script de importação
-npm run import:csv
-```
-
-**Importante:** Este comando deve ser executado **antes** de iniciar a aplicação, pois ele popula o banco de dados com os dados iniciais do arquivo CSV.
-
-### Passo 4: Iniciar a aplicação
-```bash
-docker-compose up -d app
-```
-
-Ou para iniciar todos os serviços de uma vez (após executar o import:csv):
-```bash
-docker-compose up -d
-```
-
-### Passo 5: Verificar se os serviços estão rodando
+### Passo 3: Verificar se os serviços estão rodando
 ```bash
 docker-compose ps
 ```
@@ -125,17 +96,40 @@ Você deve ver os dois containers rodando:
 - `postgres-employee-feedback` (banco de dados)
 - `api-employee-feedback` (aplicação)
 
-### Passo 6: Verificar logs da aplicação
+### Passo 4: Verificar logs da aplicação
 ```bash
 docker-compose logs -f app
 ```
 
-### Passo 7: Acessar a aplicação
+Os logs mostrarão:
+- O início da aplicação na porta 8000
+
+### Passo 5: Acessar a aplicação
 - **API:** http://localhost:8000
 - **Swagger Documentation:** http://localhost:8000/api/v1/docs
 - **Banco de dados:** localhost:5432
 
----
+### Comandos úteis
+
+**Parar os serviços:**
+```bash
+docker-compose down
+```
+
+**Parar e remover volumes (limpar dados do banco):**
+```bash
+docker-compose down -v
+```
+
+**Reconstruir a aplicação após mudanças no código:**
+```bash
+docker-compose up -d --build app
+```
+
+**Ver logs do banco de dados:**
+```bash
+docker-compose logs -f postgres
+```
 
 ## 💻 Executar Localmente (sem Docker)
 
@@ -176,12 +170,10 @@ npm run build
 npm start
 ```
 
-### 7. Modo desenvolvimento (com hot-reload)
+### 7. Modo desenvolvimento
 ```bash
 npm run start:dev
 ```
-
----
 
 ## 📡 Endpoints da API
 
@@ -214,7 +206,6 @@ http://localhost:8000/api/v1
 - `dateTo` - Data final (formato: YYYY-MM-DD)
 - `search` - Busca textual
 
----
 
 ## 📚 Documentação da API
 
@@ -224,7 +215,6 @@ A documentação completa da API está disponível via Swagger UI:
 http://localhost:8000/api/v1/docs
 ```
 
----
 
 ## 🧪 Testes
 
@@ -236,7 +226,6 @@ npm test
 npm test -- --watch
 ```
 
----
 
 ## 📁 Estrutura do Projeto
 

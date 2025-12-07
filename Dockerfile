@@ -3,7 +3,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 RUN npm run build
@@ -13,10 +13,15 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install
 
 COPY --from=builder /app/build ./build
-COPY --from=builder /app/src/docs ./src/docs
+COPY --from=builder /app/src/docs ./build/docs
+COPY --from=builder /app/src/config/database/data.csv ./src/config/database/data.csv
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 8000
 

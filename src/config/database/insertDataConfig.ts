@@ -73,10 +73,9 @@ async function insertDataConfig() {
     await AppDataSource.initialize();
     const employeeFeedbackRepository = AppDataSource.getRepository(EmployeeFeedbackEntity);
 
-    // Verificar se já existem dados no banco
-    const existingCount = await employeeFeedbackRepository.count();
-    if (existingCount > 0) {
-        console.log(`Dados já existem no banco (${existingCount} registros). Pulando importação.`);
+    const count = await employeeFeedbackRepository.count();
+    if (count > 0) {
+        console.log(`Dados já existem no banco (${count} registros). Pulando importação.`);
         await AppDataSource.destroy();
         return;
     }
@@ -100,7 +99,6 @@ async function insertDataConfig() {
         return;
     }
 
-    // Parse do header
     const headers = lines[0].split(';').map(h => h.trim());
     
     console.log(`Encontradas ${lines.length - 1} linhas de dados`);
@@ -108,7 +106,6 @@ async function insertDataConfig() {
     let inserted = 0;
     let errors = 0;
 
-    // Processar cada linha de dados
     for (let i = 1; i < lines.length; i++) {
         let row: { [key: string]: string } = {};
         try {
@@ -119,13 +116,10 @@ async function insertDataConfig() {
                 row[header] = values[index]?.trim() || '';
             });
 
-            // Verificar se a linha tem dados válidos
             if (!row['nome'] || !row['email']) {
                 console.warn(`Linha ${i + 1} ignorada: dados incompletos`);
                 continue;
             }
-
-            // Verificar se o email já existe no banco
             const existingRecord = await employeeFeedbackRepository.findOne({
                 where: { email: row['email'] }
             });
@@ -177,7 +171,6 @@ async function insertDataConfig() {
                 console.log(`Processadas ${inserted} linhas...`);
             }
         } catch (error: any) {
-            // Se for erro de duplicação, apenas avisar e continuar
             if (error?.code === '23505' || error?.driverError?.code === '23505') {
                 const email = row['email'] || 'desconhecido';
                 console.warn(`Linha ${i + 1} ignorada: registro duplicado (email: ${email})`);

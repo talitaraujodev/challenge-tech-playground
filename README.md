@@ -228,12 +228,102 @@ http://localhost:8000/api/v1/docs
 
 ## 🧪 Testes
 
+Os testes podem ser executados de duas formas:
+
+### Opção 1: Executar Localmente (sem Docker)
+
+Para executar os testes localmente, você precisa ter o PostgreSQL instalado e rodando na sua máquina.
+
+#### 1. Instalar dependências
+```bash
+npm install
+```
+
+#### 2. Configurar variáveis de ambiente
+Certifique-se de que o arquivo `.env` está configurado com as credenciais do banco de dados local:
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=123456789
+DB_NAME=people_insights
+```
+
+#### 3. Criar o banco de dados de teste
+```bash
+# Criar o banco de dados (se ainda não existir)
+createdb -U postgres people_insights
+
+# Executar o script de criação das tabelas
+psql -U postgres -d people_insights -f src/config/database/createTableConfig.sql
+```
+
+#### 4. Executar os testes
 ```bash
 # Executar todos os testes
 npm test
 
 # Executar testes em modo watch
 npm test -- --watch
+```
+
+### Opção 2: Com Docker (apenas banco de dados)
+
+Esta opção usa Docker apenas para o banco de dados PostgreSQL, enquanto os testes são executados localmente.
+
+#### 1. Instalar dependências
+```bash
+npm install
+```
+
+#### 2. Iniciar apenas o banco de dados com Docker
+```bash
+# Iniciar apenas o serviço do PostgreSQL
+docker-compose up -d postgres
+```
+
+#### 3. Verificar se o banco está rodando
+```bash
+docker-compose ps
+```
+
+Você deve ver apenas o container `postgres-employee-feedback` rodando.
+
+#### 4. Configurar variáveis de ambiente
+Certifique-se de que o arquivo `.env` está configurado para conectar ao banco Docker:
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=123456789
+DB_NAME=people_insights
+```
+
+#### 5. Executar os testes
+```bash
+# Executar todos os testes
+npm test
+
+# Executar testes em modo watch
+npm test -- --watch
+```
+
+#### 6. Parar o banco de dados (quando terminar)
+```bash
+docker-compose down
+```
+
+### Comandos úteis para testes
+
+```bash
+# Executar testes com cobertura detalhada
+npm test -- --coverage
+
+# Executar um arquivo de teste específico
+npm test -- tests/application/services/EmployeeFeedbackService.test.ts
+
+# Executar testes em modo verbose
+npm test -- --verbose
 ```
 
 
